@@ -56,6 +56,7 @@
 - [`KT-13259`](https://youtrack.jetbrains.com/issue/KT-13259) "Redundant if statement" inspection: report also assignments (as done for Java)
 - [`KT-13393`](https://youtrack.jetbrains.com/issue/KT-13393) Implement intention to convert function reference to lambda
 - [`KT-14459`](https://youtrack.jetbrains.com/issue/KT-14459) Initialize with Constructor Parameter: Fix IDE freeze on properties in generic class
+- [`KT-14044`](https://youtrack.jetbrains.com/issue/KT-14044) Fix exception on deleting unused declaration in IDEA 2016.3
 
 ##### Issues fixed
 - [`KT-14396`](https://youtrack.jetbrains.com/issue/KT-14396) "Remove redundant `.let` call" was not proposed for binary operations
