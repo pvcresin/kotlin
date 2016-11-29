@@ -153,6 +153,7 @@ import org.jetbrains.kotlin.serialization.AbstractLocalClassProtoTest
 import org.jetbrains.kotlin.shortenRefs.AbstractShortenRefsTest
 import org.jetbrains.kotlin.test.TargetBackend
 import org.jetbrains.kotlin.types.AbstractTypeBindingTest
+import org.jetbrains.kotlin.idea.refactoring.AbstractNameSuggestionProviderTest
 import org.jetbrains.kotlin.uast.AbstractKotlinLintTest
 import java.io.File
 import java.util.*
@@ -866,6 +867,10 @@ fun main(args: Array<String>) {
 
         testClass<AbstractPostfixTemplateProviderTest> {
             model("codeInsight/postfix")
+        }
+
+        testClass<AbstractNameSuggestionProviderTest> {
+            model("refactoring/nameSuggestionProvider")
         }
     }
 
