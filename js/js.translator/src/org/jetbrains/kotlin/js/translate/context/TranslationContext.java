@@ -22,11 +22,14 @@ import com.intellij.psi.PsiElement;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jetbrains.kotlin.descriptors.*;
+import org.jetbrains.kotlin.descriptors.annotations.Annotations;
+import org.jetbrains.kotlin.descriptors.impl.LocalVariableDescriptor;
 import org.jetbrains.kotlin.descriptors.impl.TypeAliasConstructorDescriptor;
 import org.jetbrains.kotlin.js.config.JsConfig;
 import org.jetbrains.kotlin.js.translate.intrinsic.Intrinsics;
 import org.jetbrains.kotlin.js.translate.utils.JsAstUtils;
 import org.jetbrains.kotlin.js.translate.utils.TranslationUtils;
+import org.jetbrains.kotlin.name.Name;
 import org.jetbrains.kotlin.psi.KtExpression;
 import org.jetbrains.kotlin.resolve.BindingContext;
 import org.jetbrains.kotlin.resolve.BindingTrace;
@@ -60,6 +63,8 @@ public class TranslationContext {
     private final DeclarationDescriptor declarationDescriptor;
     @Nullable
     private final ClassDescriptor classDescriptor;
+    @Nullable
+    private final VariableDescriptor continuationParameterDescriptor;
 
     @NotNull
     public static TranslationContext rootContext(@NotNull StaticContext staticContext, @NotNull JsFunction rootFunction) {
@@ -90,6 +95,31 @@ public class TranslationContext {
         }
         else {
             this.classDescriptor = parent != null ? parent.classDescriptor : null;
+        }
+
+        if (parent != null && parent.declarationDescriptor == declarationDescriptor) {
+            continuationParameterDescriptor = parent.continuationParameterDescriptor;
+        }
+        else if (declarationDescriptor instanceof FunctionDescriptor) {
+            FunctionDescriptor function = (FunctionDescriptor) declarationDescriptor;
+            if (function.isSuspend()) {
+                ClassDescriptor continuationDescriptor = getCurrentModule().getBuiltIns().getBuiltInClassByFqName(
+                        DescriptorUtils.CONTINUATION_INTERFACE_FQ_NAME);
+                continuationParameterDescriptor = new LocalVariableDescriptor(
+                        declarationDescriptor,
+                        Annotations.Companion.getEMPTY(),
+                        Name.identifier("continuation"),
+                        continuationDescriptor.getDefaultType(),
+                        /* mutable = */ false,
+                        /* delegated = */ false,
+                        SourceElement.NO_SOURCE);
+            }
+            else {
+                continuationParameterDescriptor = null;
+            }
+        }
+        else {
+            continuationParameterDescriptor = null;
         }
     }
 
@@ -613,6 +643,15 @@ public class TranslationContext {
             descriptor = descriptor.getContainingDeclaration();
         }
         return false;
+    }
+
+    public boolean isInSuspendFunction() {
+        return declarationDescriptor instanceof FunctionDescriptor && ((FunctionDescriptor) declarationDescriptor).isSuspend();
+    }
+
+    @Nullable
+    public VariableDescriptor getContinuationParameterDescriptor() {
+        return continuationParameterDescriptor;
     }
 
     @NotNull
