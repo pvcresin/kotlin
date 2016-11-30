@@ -64,4 +64,5 @@ internal annotation class InlineOnly
  */
 @Target(AnnotationTarget.CLASS, AnnotationTarget.CONSTRUCTOR, AnnotationTarget.FUNCTION, AnnotationTarget.PROPERTY)
 @Retention(AnnotationRetention.BINARY)
+@Deprecated("Annotation not removed only to support compilation against old stdlib")
 internal annotation class InlineExposed
