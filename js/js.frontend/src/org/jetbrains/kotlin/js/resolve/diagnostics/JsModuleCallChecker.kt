@@ -53,7 +53,7 @@ object JsModuleCallChecker : CallChecker {
                     context.trace.report(ErrorsJs.CALL_TO_JS_MODULE_WITHOUT_MODULE_SYSTEM.on(reportOn))
                 }
             }
-            if (moduleKind != ModuleKind.PLAIN) {
+            else {
                 if (!callToModule && callToNonModule) {
                     context.trace.report(ErrorsJs.CALL_TO_JS_NON_MODULE_WITH_MODULE_SYSTEM.on(reportOn))
                 }
