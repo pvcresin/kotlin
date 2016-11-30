@@ -195,7 +195,7 @@ object KotlinJavascriptSerializationUtil {
     private fun serializeFiles(fileRegistry: KotlinFileRegistry, bindingContext: BindingContext,
                                serializer: AnnotationSerializer): ByteArray {
         val filesProto = JsProtoBuf.Files.newBuilder()
-        for ((id, file) in fileRegistry.files.withIndex()) {
+        for ((file, id) in fileRegistry.fileIds) {
             val fileProto = JsProtoBuf.File.newBuilder()
             fileProto.id = id
             for (annotationPsi in file.annotationEntries) {

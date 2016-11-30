@@ -77,7 +77,7 @@ class KotlinJavascriptPackageFragment(
 
     fun getContainingFileAnnotations(descriptor: DeclarationDescriptor): List<AnnotationDescriptor> {
         if (DescriptorUtils.getParentOfType(descriptor, PackageFragmentDescriptor::class.java) != this) {
-            throw IllegalArgumentException("Given descriptor $descriptor does not belong to this package $this")
+            throw IllegalArgumentException("Provided descriptor $descriptor does not belong to this package $this")
         }
         val fileId = when (descriptor) {
             is DeserializedClassDescriptor -> descriptor.classProto.getExtension(JsProtoBuf.classContainingFileId)

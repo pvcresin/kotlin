@@ -19,14 +19,10 @@ package org.jetbrains.kotlin.serialization.js
 import org.jetbrains.kotlin.psi.KtFile
 
 class KotlinFileRegistry {
-    private val fileList = mutableListOf<KtFile>()
-    private val fileIds = mutableMapOf<KtFile, Int>()
+    private val fileIdsImpl = mutableMapOf<KtFile, Int>()
 
-    fun lookup(file: KtFile) = fileIds.getOrPut(file) {
-        val result = fileList.size
-        fileList += file
-        result
-    }
+    fun lookup(file: KtFile) = fileIdsImpl.getOrPut(file) { fileIdsImpl.size }
 
-    val files: List<KtFile> = fileList
+    val fileIds: Map<KtFile, Int>
+        get() = fileIdsImpl
 }
