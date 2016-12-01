@@ -36,7 +36,7 @@ interface TypeSpecificityComparator {
     }
 }
 
-class FlatSignature<out T>(
+class FlatSignature<out T> private constructor(
         val origin: T,
         val typeParameters: Collection<TypeParameterDescriptor>,
         val valueParameterTypes: List<KotlinType?>,
@@ -48,14 +48,23 @@ class FlatSignature<out T>(
     val isGeneric = typeParameters.isNotEmpty()
 
     companion object {
-        fun <D : CallableDescriptor> createFromCallableDescriptor(descriptor: D): FlatSignature<D> =
-                FlatSignature(descriptor,
+        fun <T> create(
+                origin: T,
+                descriptor: CallableDescriptor,
+                numDefaults: Int
+        ): FlatSignature<T> =
+                FlatSignature(origin,
                               descriptor.typeParameters,
                               valueParameterTypes = descriptor.extensionReceiverTypeOrEmpty() + descriptor.valueParameters.map { it.argumentValueType },
                               hasExtensionReceiver = descriptor.extensionReceiverParameter != null,
                               hasVarargs = descriptor.valueParameters.any { it.varargElementType != null },
-                              numDefaults = 0,
-                              isPlatform = descriptor is MemberDescriptor && descriptor.isPlatform)
+                              numDefaults = numDefaults,
+                              isPlatform = descriptor is MemberDescriptor && descriptor.isPlatform
+                )
+
+        fun <D : CallableDescriptor> createFromCallableDescriptor(
+                descriptor: D
+        ): FlatSignature<D> = create(descriptor, descriptor, numDefaults = 0)
 
         val ValueParameterDescriptor.argumentValueType: KotlinType
             get() = varargElementType ?: type
