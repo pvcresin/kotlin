@@ -44,7 +44,7 @@ abstract class AbstractAnnotationProcessorBoxTest : KotlinTestWithEnvironment() 
         val testDir = File(path)
 
         fun filesByExtension(ext: String) = testDir
-                .listFiles { file -> file.isFile && file.extension.equals(ext, ignoreCase = true) }
+                .listFiles { file -> file.isFile && file.extension.equals(ext, ignoreCase = true) }!!
                 .sortedBy { it.name }
 
         val testName = getTestName(true)

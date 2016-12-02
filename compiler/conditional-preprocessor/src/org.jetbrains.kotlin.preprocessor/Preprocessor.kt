@@ -97,7 +97,7 @@ class Preprocessor(val logger: Logger = SystemOutLogger) {
     }
 
     private fun processDirectorySingleEvaluator(sourceRoot: File, targetRoot: File, evaluator: Evaluator) {
-        val (sourceFiles, sourceDirectories) = sourceRoot.listFiles().partition { !it.isDirectory }
+        val (sourceFiles, sourceDirectories) = sourceRoot.listFiles()!!.partition { !it.isDirectory }
 
         val processedFiles = hashSetOf<File>()
         for (sourceFile in sourceFiles)
@@ -136,7 +136,7 @@ class Preprocessor(val logger: Logger = SystemOutLogger) {
             processedFiles += targetDir
         }
 
-        for (targetFile in targetRoot.listFiles()) {
+        for (targetFile in targetRoot.listFiles()!!) {
             if (!processedFiles.remove(processedFiles.find { FileUtil.filesEqual(it, targetFile) })) {
                 logger.info("Deleting skipped $targetFile")
                 targetFile.deleteRecursively()

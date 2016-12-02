@@ -126,7 +126,7 @@ open class MetadataSerializer(private val dependOnOldBuiltIns: Boolean) {
             }
         }.serializeToByteArray()
 
-        kotlinModuleFile.parentFile.mkdirs()
+        kotlinModuleFile.parentFile!!.mkdirs()
         kotlinModuleFile.writeBytes(packageTableBytes)
     }
 
@@ -193,7 +193,7 @@ open class MetadataSerializer(private val dependOnOldBuiltIns: Boolean) {
             totalSize += stream.size()
             totalFiles++
             assert(!destFile.isDirectory) { "Cannot write because output destination is a directory: $destFile" }
-            destFile.parentFile.mkdirs()
+            destFile.parentFile!!.mkdirs()
             destFile.writeBytes(stream.toByteArray())
         }
     }

@@ -30,7 +30,7 @@ import java.util.regex.Pattern
 
 abstract class AbstractIrTextTestCase : AbstractIrGeneratorTestCase() {
     override fun doTest(wholeFile: File, testFiles: List<TestFile>) {
-        val dir = wholeFile.parentFile
+        val dir = wholeFile.parentFile!!
         val ignoreErrors = shouldIgnoreErrors(wholeFile)
         for ((testFile, irFile) in generateIrFilesAsSingleModule(testFiles, ignoreErrors)) {
             doTestIrFileAgainstExpectations(dir, testFile, irFile)

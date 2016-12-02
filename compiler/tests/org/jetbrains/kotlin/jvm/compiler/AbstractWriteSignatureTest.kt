@@ -141,12 +141,12 @@ abstract class AbstractWriteSignatureTest : TestCaseWithTmpdir() {
         private fun processPackageParts(checker: Checker, classFile: File) {
             // Look for package parts in the same directory.
             // Package part file names for package SomePackage look like SomePackage$<hash>.class.
-            val classDir = classFile.parentFile
+            val classDir = classFile.parentFile!!
             val classLastName = classFile.name
             val packageFacadePrefix = classLastName.replace(".class", "\$")
             classDir.listFiles { dir, lastName ->
                 lastName.startsWith(packageFacadePrefix) && lastName.endsWith(".class")
-            }.forEach { packageFacadeFile ->
+            }!!.forEach { packageFacadeFile ->
                 processClassFile(checker, packageFacadeFile)
             }
         }

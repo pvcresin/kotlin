@@ -255,7 +255,7 @@ abstract class AbstractAnnotationProcessingExtension(
                 val analyzedClasses = firstRoundAnnotations.analyzedClasses
                 log { "Saving incremental data: ${analyzedClasses.size} class names" }
                 try {
-                    incrementalDataFile.parentFile.mkdirs()
+                    incrementalDataFile.parentFile!!.mkdirs()
                     incrementalDataFile.writeText(analyzedClasses.map { "i $it" }.joinToString(LINE_SEPARATOR))
                 }
                 catch (e: IOException) {

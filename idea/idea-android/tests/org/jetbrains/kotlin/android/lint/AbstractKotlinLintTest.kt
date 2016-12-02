@@ -55,7 +55,7 @@ abstract class AbstractKotlinLintTest : KotlinAndroidTestCase() {
 
         val additionalResourcesDir = File(ktFile.parentFile, getTestName(true))
         if (additionalResourcesDir.exists()) {
-            for (file in additionalResourcesDir.listFiles()) {
+            for (file in additionalResourcesDir.listFiles()!!) {
                 if (file.isFile) {
                     myFixture.copyFileToProject(file.absolutePath, file.name)
                 }

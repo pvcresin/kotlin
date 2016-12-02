@@ -245,7 +245,7 @@ class AnnotationCollectorExtension(
     override fun getWriter(diagnostic: DiagnosticSink): Writer {
         return writerInternal ?: try {
             with (File(outputFilename)) {
-                val parent = parentFile
+                val parent = parentFile!!
                 if (!parent.exists()) parent.mkdirs()
                 writerInternal = bufferedWriter()
                 writerInternal!!

@@ -270,7 +270,7 @@ abstract class AbstractFindUsagesTest : KotlinLightCodeInsightFixtureTestCase() 
                 || ext == "txt" && !name.endsWith(".results.txt")
             }
 
-            for (file in extraFiles) {
+            for (file in extraFiles!!) {
                 myFixture.configureByFile(rootPath + file.name)
             }
             myFixture.configureByFile(path)

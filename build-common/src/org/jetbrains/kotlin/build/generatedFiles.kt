@@ -37,4 +37,4 @@ class GeneratedJvmClass<Target> (
     }
 }
 
-fun File.isModuleMappingFile() = extension == ModuleMapping.MAPPING_FILE_EXT && parentFile.name == "META-INF"
+fun File.isModuleMappingFile() = extension == ModuleMapping.MAPPING_FILE_EXT && parentFile!!.name == "META-INF"

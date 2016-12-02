@@ -52,9 +52,9 @@ abstract class AbstractMemberPullPushTest : KotlinLightCodeInsightFixtureTestCas
 
         val mainFileName = mainFile.name
         val mainFileBaseName = FileUtil.getNameWithoutExtension(mainFileName)
-        val extraFiles = mainFile.parentFile.listFiles { file, name ->
+        val extraFiles = mainFile.parentFile!!.listFiles { file, name ->
             name != mainFileName && name.startsWith("$mainFileBaseName.") && (name.endsWith(".kt") || name.endsWith(".java"))
-        }
+        }!!
         val extraFilesToPsi = extraFiles.associateBy { fixture.configureByFile(it.name) }
         val file = fixture.configureByFile(mainFileName)
 

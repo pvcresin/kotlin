@@ -90,7 +90,7 @@ abstract class BasicBoxTest(
                 val dependencies = module.dependencies.mapNotNull { modules[it]?.outputFileName(outputDir) + ".meta.js" }
 
                 val outputFileName = module.outputFileName(outputDir) + ".js"
-                generateJavaScriptFile(file.parent, module, outputFileName, dependencies, modules.size > 1)
+                generateJavaScriptFile(file.parent!!, module, outputFileName, dependencies, modules.size > 1)
 
                 if (!module.name.endsWith(OLD_MODULE_SUFFIX)) outputFileName else null
             }
@@ -286,7 +286,7 @@ abstract class BasicBoxTest(
             }
 
             val temporaryFile = File(tmpDir, "${(module ?: defaultModule).name}/$fileName")
-            KotlinTestUtils.mkdirs(temporaryFile.parentFile)
+            KotlinTestUtils.mkdirs(temporaryFile.parentFile!!)
             temporaryFile.writeText(text, Charsets.UTF_8)
 
             return TestFile(temporaryFile.absolutePath, module ?: defaultModule)

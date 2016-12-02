@@ -77,7 +77,7 @@ class KotlinFiler(
             vararg originatingElements: Element?
     ): FileObject? {
         val (resourceFile, fileName) = getResourceFile(location, pkg, relativeName)
-        resourceFile.parentFile.mkdirs()
+        resourceFile.parentFile!!.mkdirs()
         return KotlinFileObject(resourceFile.notifyCreated(), fileName)
     }
     

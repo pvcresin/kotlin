@@ -48,7 +48,7 @@ abstract class AbstractKotlinExceptionFilterTest : KotlinCodeInsightTestCase() {
     protected fun doTest(path: String) {
         val rootDir = File(path)
         val mainFile = File(rootDir, rootDir.name + ".kt")
-        rootDir.listFiles().filter { it != mainFile }.forEach { configureByFile(it.canonicalPath) }
+        rootDir.listFiles()!!.filter { it != mainFile }.forEach { configureByFile(it.canonicalPath) }
         configureByFile(mainFile.canonicalPath)
 
         val fileText = file.text

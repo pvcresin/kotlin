@@ -171,7 +171,7 @@ class K2JVMCompiler : CLICompiler<K2JVMCompilerArguments>() {
                 }
 
                 val moduleFile = File(arguments.module)
-                val directory = moduleFile.absoluteFile.parentFile
+                val directory = moduleFile.absoluteFile.parentFile!!
 
                 KotlinToJVMBytecodeCompiler.configureSourceRoots(configuration, moduleScript.modules, directory)
                 configuration.put(JVMConfigurationKeys.MODULE_XML_FILE, moduleFile)

@@ -34,7 +34,7 @@ internal object KotlinAntTaskUtil {
                             ?: throw UnsupportedOperationException("Kotlin compiler Ant task should be loaded from the JAR file")
         val antTaskJarPath = File(jarConnection.jarFileURL.toURI())
 
-        antTaskJarPath.parentFile
+        antTaskJarPath.parentFile!!
     }
 
     val compilerJar: File by jar("kotlin-compiler.jar")

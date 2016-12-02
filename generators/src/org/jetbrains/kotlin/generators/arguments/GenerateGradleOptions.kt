@@ -90,7 +90,7 @@ fun generateKotlinGradleOptions(withPrinterToFile: (targetFile: File, Printer.()
 fun main(args: Array<String>) {
     fun getPrinter(file: File, fn: Printer.()->Unit) {
         if (!file.exists()) {
-            file.parentFile.mkdirs()
+            file.parentFile!!.mkdirs()
             file.createNewFile()
         }
         PrintStream(file.outputStream()).use {

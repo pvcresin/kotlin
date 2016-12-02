@@ -167,7 +167,7 @@ abstract class AddKotlinLibQuickFix(element: KtElement) : KotlinQuickFixAction<K
 
             val model = library.modifiableModel
 
-            val libFilesDir = VfsUtilCore.virtualToIoFile(runtimeJar).parent
+            val libFilesDir = VfsUtilCore.virtualToIoFile(runtimeJar).parent!!
 
             val libIoFile = File(libFilesDir, libraryPath())
             if (libIoFile.exists()) {

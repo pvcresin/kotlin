@@ -39,7 +39,7 @@ abstract class AbstractAndroidResourceIntentionTest : KotlinAndroidTestCase() {
 
     fun doTest(path: String) {
         val configFile = File(path)
-        val testDataPath = configFile.parent
+        val testDataPath = configFile.parent!!
 
         myFixture.testDataPath = testDataPath
 

@@ -45,7 +45,7 @@ abstract class AbstractLocalClassProtoTest : TestCaseWithTmpdir() {
         val classLoader = URLClassLoader(arrayOf(tmpdir.toURI().toURL()), ForTestCompileRuntime.runtimeAndReflectJarClassLoader())
 
         val classFile = tmpdir.walkTopDown().singleOrNull { it.path.endsWith("$classNameSuffix.class") }
-                        ?: error("Local class with suffix `$classNameSuffix` is not found in: ${tmpdir.listFiles().toList()}")
+                        ?: error("Local class with suffix `$classNameSuffix` is not found in: ${tmpdir.listFiles()!!.toList()}")
         val clazz = classLoader.loadClass(classFile.toRelativeString(tmpdir).substringBeforeLast(".class").replace('/', '.').replace('\\', '.'))
         assertHasAnnotationData(clazz)
 

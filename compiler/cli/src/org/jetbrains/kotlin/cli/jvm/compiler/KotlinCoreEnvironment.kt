@@ -402,12 +402,12 @@ class KotlinCoreEnvironment private constructor(
             var pluginRoot = if (locator == null) PathUtil.getPathUtilJar() else locator.compilerJar
 
             val app = ApplicationManager.getApplication()
-            val parentFile = pluginRoot.parentFile
+            val parentFile = pluginRoot.parentFile!!
 
             if (pluginRoot.isDirectory && app != null && app.isUnitTestMode
                 && FileUtil.toCanonicalPath(parentFile.path).endsWith("out/production")) {
                 // hack for load extensions when compiler run directly from out directory(e.g. in tests)
-                val srcDir = parentFile.parentFile.parentFile
+                val srcDir = parentFile.parentFile!!.parentFile!!
                 pluginRoot = File(srcDir, "idea/src")
             }
 

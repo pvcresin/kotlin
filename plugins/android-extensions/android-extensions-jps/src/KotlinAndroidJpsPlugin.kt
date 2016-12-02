@@ -67,11 +67,11 @@ class KotlinAndroidJpsPlugin : KotlinJpsCompilerArgumentsProvider {
         return if (manifestFile != null) {
             listOf(
                     if (inJar) {
-                        val libDirectory = File(PathUtil.getJarPathForClass(javaClass)).parentFile.parentFile
+                        val libDirectory = File(PathUtil.getJarPathForClass(javaClass)).parentFile!!.parentFile!!
                         File(libDirectory, JAR_FILE_NAME).absolutePath
                     } else {
                         // We're in tests now (in out/production/android-extensions/android-extensions-jps)
-                        val kotlinProjectDirectory = File(PathUtil.getJarPathForClass(javaClass)).parentFile.parentFile.parentFile
+                        val kotlinProjectDirectory = File(PathUtil.getJarPathForClass(javaClass)).parentFile!!.parentFile!!.parentFile!!
                         File(kotlinProjectDirectory, "dist/kotlinc/lib/$JAR_FILE_NAME").absolutePath
                     })
         }

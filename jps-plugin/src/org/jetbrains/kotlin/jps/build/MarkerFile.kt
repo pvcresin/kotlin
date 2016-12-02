@@ -38,7 +38,7 @@ abstract class MarkerFile(private val fileName: String, private val paths: Build
         val file = target.markerFile
 
         if (!file.exists()) {
-            file.parentFile.mkdirs()
+            file.parentFile!!.mkdirs()
             file.createNewFile()
         }
 

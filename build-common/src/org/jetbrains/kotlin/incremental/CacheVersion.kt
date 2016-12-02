@@ -63,10 +63,7 @@ class CacheVersion(
     fun saveIfNeeded() {
         if (!isEnabled) return
 
-        if (!versionFile.parentFile.exists()) {
-            versionFile.parentFile.mkdirs()
-        }
-
+        versionFile.parentFile!!.mkdirs()
         versionFile.writeText(expectedVersion.toString())
     }
 

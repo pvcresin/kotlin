@@ -109,7 +109,7 @@ open class LookupStorage(private val targetDataDir: File) : BasicMapsOwner() {
 
             if (size > 0) {
                 if (!countersFile.exists()) {
-                    countersFile.parentFile.mkdirs()
+                    countersFile.parentFile!!.mkdirs()
                     countersFile.createNewFile()
                 }
 

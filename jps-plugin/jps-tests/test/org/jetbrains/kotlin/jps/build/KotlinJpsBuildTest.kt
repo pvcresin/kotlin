@@ -141,7 +141,7 @@ class KotlinJpsBuildTest : AbstractKotlinJpsBuildTestCase() {
         private fun assertFilesExistInOutput(module: JpsModule, vararg relativePaths: String) {
             for (path in relativePaths) {
                 val outputFile = findFileInOutputDir(module, path)
-                assertTrue("Output not written: " + outputFile.absolutePath + "\n Directory contents: \n" + dirContents(outputFile.parentFile), outputFile.exists())
+                assertTrue("Output not written: " + outputFile.absolutePath + "\n Directory contents: \n" + dirContents(outputFile.parentFile!!), outputFile.exists())
             }
         }
 

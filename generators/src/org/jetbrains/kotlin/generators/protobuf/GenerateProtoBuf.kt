@@ -34,7 +34,7 @@ import java.util.regex.Pattern
 private const val PROTOC_EXE = "protoc"
 
 class ProtoPath(val file: String) {
-    val outPath: String = File(file).parent
+    val outPath: String = File(file).parent!!
     val packageName: String = findFirst(Pattern.compile("package (.+);"))
     val className: String = findFirst(Pattern.compile("option java_outer_classname = \"(.+)\";"))
     val debugClassName: String = "Debug$className"
