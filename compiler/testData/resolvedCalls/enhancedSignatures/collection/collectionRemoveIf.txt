@@ -1,0 +1,20 @@
+fun notNullValues(collection: MutableCollection<String>) {
+    collection.removeIf { it.length > 5 }
+        // SUCCESS
+        // ORIGINAL:    fun <E> MutableCollection<E>.removeIf((E) -> Boolean): Boolean
+        // SUBSTITUTED: fun <E> MutableCollection<String>.removeIf((String) -> Boolean): Boolean
+}
+
+fun <E : CharSequence> nullableValues(collection: MutableCollection<E?>) {
+    collection.removeIf { it != null && it.length > 5 }
+        // SUCCESS
+        // ORIGINAL:    fun <E> MutableCollection<E>.removeIf((E) -> Boolean): Boolean
+        // SUBSTITUTED: fun <E> MutableCollection<E?>.removeIf((E?) -> Boolean): Boolean
+}
+
+fun <E : CharSequence?> nullableValues2(collection: MutableCollection<E>) {
+    collection.removeIf { it == null }
+        // SUCCESS
+        // ORIGINAL:    fun <E> MutableCollection<E>.removeIf((E) -> Boolean): Boolean
+        // SUBSTITUTED: fun <E> MutableCollection<E>.removeIf((E) -> Boolean): Boolean
+}

@@ -149,6 +149,7 @@ import org.jetbrains.kotlin.renderer.AbstractFunctionDescriptorInExpressionRende
 import org.jetbrains.kotlin.repl.AbstractReplInterpreterTest
 import org.jetbrains.kotlin.resolve.AbstractResolveTest
 import org.jetbrains.kotlin.resolve.annotation.AbstractAnnotationParameterTest
+import org.jetbrains.kotlin.resolve.calls.AbstractEnhancedSignaturesResolvedCallsTest
 import org.jetbrains.kotlin.resolve.calls.AbstractResolvedCallsTest
 import org.jetbrains.kotlin.resolve.calls.AbstractResolvedConstructorDelegationCallsTests
 import org.jetbrains.kotlin.resolve.constants.evaluate.AbstractCompileTimeConstantEvaluatorTest
@@ -206,7 +207,7 @@ fun main(args: Array<String>) {
         }
 
         testClass<AbstractResolvedCallsTest>() {
-            model("resolvedCalls")
+            model("resolvedCalls", excludeDirs = listOf("enhancedSignatures"))
         }
 
         testClass<AbstractResolvedConstructorDelegationCallsTests>() {
@@ -413,6 +414,10 @@ fun main(args: Array<String>) {
         testClass<AbstractLoadJava8Test> {
             model("loadJava8/compiledJava", extension = "java", testMethod = "doTestCompiledJava")
             model("loadJava8/sourceJava", extension = "java", testMethod = "doTestSourceJava")
+        }
+
+        testClass<AbstractEnhancedSignaturesResolvedCallsTest> {
+            model("resolvedCalls/enhancedSignatures")
         }
 
         testClass<AbstractJvm8RuntimeDescriptorLoaderTest>() {

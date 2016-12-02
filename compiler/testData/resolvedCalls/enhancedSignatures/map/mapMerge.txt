@@ -1,0 +1,40 @@
+fun valuesNotNull(map: MutableMap<Int, String>) {
+    map.merge(1, "x") { old, new -> old + new }
+        // SUCCESS
+        // ORIGINAL:    fun <K, V> MutableMap<K, V>.merge(K, V, (V, V) -> V?): V?
+        // SUBSTITUTED: fun <K, V> MutableMap<Int, String>.merge(Int, String, (String, String) -> String?): String?
+}
+
+fun valuesNullable(map: MutableMap<Int, String?>) {
+    // TODO: Fix OTHER_ERROR
+    map.merge(1, "x") { old, new -> old + new }
+        // OTHER_ERROR
+        // ORIGINAL:    fun <K, V> MutableMap<K, V>.merge(K, V, (V, V) -> V?): V?
+        // SUBSTITUTED: fun <K, V> MutableMap<Int, ???>.merge(Int, ???, (???, ???) -> ???): ???
+    map.merge(1, null) { old, new -> old + new }
+        // OTHER_ERROR
+        // ORIGINAL:    fun <K, V> MutableMap<K, V>.merge(K, V, (V, V) -> V?): V?
+        // SUBSTITUTED: fun <K, V> MutableMap<Int, ???>.merge(Int, ???, (???, ???) -> ???): ???
+}
+
+fun <T> valuesT(map: MutableMap<Int, T>, newValue: T) {
+    map.merge(1, newValue) { old, new -> null }
+        // SUCCESS
+        // ORIGINAL:    fun <K, V> MutableMap<K, V>.merge(K, V, (V, V) -> V?): V?
+        // SUBSTITUTED: fun <K, V> MutableMap<Int, T>.merge(Int, T, (T, T) -> T?): T?
+}
+
+fun <T : Any> valuesTNotNull(map: MutableMap<Int, T>, newValue: T) {
+    map.merge(1, newValue) { old, new -> null }
+        // SUCCESS
+        // ORIGINAL:    fun <K, V> MutableMap<K, V>.merge(K, V, (V, V) -> V?): V?
+        // SUBSTITUTED: fun <K, V> MutableMap<Int, T>.merge(Int, T, (T, T) -> T?): T?
+}
+
+fun <T : Any> valuesTNullable(map: MutableMap<Int, T?>, newValue: T?) {
+    // TODO: Fix OTHER_ERROR
+    map.merge(1, newValue) { old, new -> new }
+        // OTHER_ERROR
+        // ORIGINAL:    fun <K, V> MutableMap<K, V>.merge(K, V, (V, V) -> V?): V?
+        // SUBSTITUTED: fun <K, V> MutableMap<Int, ???>.merge(Int, ???, (???, ???) -> ???): ???
+}

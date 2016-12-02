@@ -1,0 +1,36 @@
+fun valuesNotNull(map: MutableMap<Int, String>) {
+    map.computeIfPresent(1) { k, v -> v.length.toString() ?: null }
+        // SUCCESS
+        // ORIGINAL:    fun <K, V> MutableMap<K, V>.computeIfPresent(K, (K, V) -> V?): V?
+        // SUBSTITUTED: fun <K, V> MutableMap<Int, String>.computeIfPresent(Int, (Int, String) -> String?): String?
+}
+
+fun valuesNullable(map: MutableMap<Int, String?>) {
+    // TODO: Fix OTHER_ERROR
+    map.computeIfPresent(1) { k, v -> v?.length?.toString() }
+        // OTHER_ERROR
+        // ORIGINAL:    fun <K, V> MutableMap<K, V>.computeIfPresent(K, (K, V) -> V?): V?
+        // SUBSTITUTED: fun <K, V> MutableMap<Int, ???>.computeIfPresent(Int, (Int, ???) -> ???): ???
+}
+
+fun <T : String?> valuesT(map: MutableMap<Int, T>, newValue: T) {
+    map.computeIfPresent(1) { k, v -> v?.length.toString() ?: null }
+        // SUCCESS
+        // ORIGINAL:    fun <K, V> MutableMap<K, V>.computeIfPresent(K, (K, V) -> V?): V?
+        // SUBSTITUTED: fun <K, V> MutableMap<Int, T>.computeIfPresent(Int, (Int, T) -> T?): T?
+}
+
+fun <T : Any> valuesTNotNull(map: MutableMap<Int, T>, newValue: T) {
+    map.computeIfPresent(1) { k, v -> null }
+        // SUCCESS
+        // ORIGINAL:    fun <K, V> MutableMap<K, V>.computeIfPresent(K, (K, V) -> V?): V?
+        // SUBSTITUTED: fun <K, V> MutableMap<Int, T>.computeIfPresent(Int, (Int, T) -> T?): T?
+}
+
+fun <T : Any> valuesTNullable(map: MutableMap<Int, T?>, newValue: T?) {
+    // TODO: Fix OTHER_ERROR
+    map.computeIfPresent(1) { k, v -> null }
+        // OTHER_ERROR
+        // ORIGINAL:    fun <K, V> MutableMap<K, V>.computeIfPresent(K, (K, V) -> V?): V?
+        // SUBSTITUTED: fun <K, V> MutableMap<Int, ???>.computeIfPresent(Int, (Int, ???) -> ???): ???
+}

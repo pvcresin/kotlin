@@ -1,0 +1,13 @@
+fun valuesNotNull(map: MutableMap<Int, String>) {
+    map.forEach { k, v -> }
+        // SUCCESS
+        // ORIGINAL:    fun <K, V> MutableMap<K, V>.forEach((K, V) -> Unit): Unit
+        // SUBSTITUTED: fun <K, V> MutableMap<Int, String>.forEach((Int, String) -> Unit): Unit
+}
+
+fun <T> valuesT(map: MutableMap<Int, T>, newValue: T) {
+    map.forEach { k, v -> }
+        // SUCCESS
+        // ORIGINAL:    fun <K, V> MutableMap<K, V>.forEach((K, V) -> Unit): Unit
+        // SUBSTITUTED: fun <K, V> MutableMap<Int, T>.forEach((Int, T) -> Unit): Unit
+}
