@@ -142,6 +142,12 @@ val PREDEFINED_FUNCTION_ENHANCEMENT_INFO_BY_SIGNATURE = signatures {
             }
         }
 
+        forClass(javaLang("ref/Reference")) {
+            function("get") {
+                returns(JLObject, NULLABLE)
+            }
+        }
+
         forClass(JFPredicate) {
             function("test") {
                 parameter(JLObject, NOT_PLATFORM)
