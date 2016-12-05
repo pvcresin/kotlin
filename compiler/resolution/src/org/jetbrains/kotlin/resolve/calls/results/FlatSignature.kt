@@ -51,26 +51,28 @@ class FlatSignature<out T> private constructor(
         fun <T> create(
                 origin: T,
                 descriptor: CallableDescriptor,
-                numDefaults: Int
-        ): FlatSignature<T> =
-                FlatSignature(origin,
-                              descriptor.typeParameters,
-                              valueParameterTypes = descriptor.extensionReceiverTypeOrEmpty() + descriptor.valueParameters.map { it.argumentValueType },
-                              hasExtensionReceiver = descriptor.extensionReceiverParameter != null,
-                              hasVarargs = descriptor.valueParameters.any { it.varargElementType != null },
-                              numDefaults = numDefaults,
-                              isPlatform = descriptor is MemberDescriptor && descriptor.isPlatform
-                )
+                numDefaults: Int,
+                parameterTypes: List<KotlinType?>
+        ): FlatSignature<T> {
+            val extensionReceiverType = descriptor.extensionReceiverParameter?.type
+
+            return FlatSignature(origin,
+                                 descriptor.typeParameters,
+                                 valueParameterTypes =
+                                    extensionReceiverType.singletonOrEmptyList() + parameterTypes,
+                                 hasExtensionReceiver = extensionReceiverType != null,
+                                 hasVarargs = descriptor.valueParameters.any { it.varargElementType != null },
+                                 numDefaults = numDefaults,
+                                 isPlatform = descriptor is MemberDescriptor && descriptor.isPlatform
+            )
+        }
 
         fun <D : CallableDescriptor> createFromCallableDescriptor(
                 descriptor: D
-        ): FlatSignature<D> = create(descriptor, descriptor, numDefaults = 0)
+        ): FlatSignature<D> =
+                create(descriptor, descriptor, numDefaults = 0, parameterTypes = descriptor.valueParameters.map { it.argumentValueType })
 
-        val ValueParameterDescriptor.argumentValueType: KotlinType
-            get() = varargElementType ?: type
-
-        fun CallableDescriptor.extensionReceiverTypeOrEmpty() =
-                extensionReceiverParameter?.type.singletonOrEmptyList()
+        val ValueParameterDescriptor.argumentValueType get() = varargElementType ?: type
     }
 }
 

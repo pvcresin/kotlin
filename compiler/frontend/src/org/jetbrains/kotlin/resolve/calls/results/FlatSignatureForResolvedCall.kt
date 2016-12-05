@@ -48,7 +48,7 @@ fun <RC : ResolvedCall<*>> RC.createFlatSignature(): FlatSignature<RC> {
         }
     }
 
-    return FlatSignature.create(this, originalDescriptor, numDefaults)
+    return FlatSignature.create(this, originalDescriptor, numDefaults, call.valueArguments.map { valueArgumentToParameterType[it] })
 }
 
 fun createOverloadingConflictResolver(
