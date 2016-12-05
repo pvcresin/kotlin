@@ -751,6 +751,8 @@
 
     <framework.detector implementation="org.jetbrains.kotlin.idea.facet.KotlinFrameworkDetector"/>
 
+    <externalAnnotator language="Kotlin" implementationClass="org.jetbrains.kotlin.idea.validators.MultiPlatformAnnotator"/>
+
     <intentionAction>
       <className>org.jetbrains.kotlin.idea.intentions.FoldInitializerAndIfToElvisIntention</className>
       <category>Kotlin</category>
