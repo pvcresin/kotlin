@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.psi.Call
 import org.jetbrains.kotlin.psi.KtArrayAccessExpression
 import org.jetbrains.kotlin.psi.KtDestructuringDeclarationEntry
 import org.jetbrains.kotlin.psi.KtOperationReferenceExpression
+import org.jetbrains.kotlin.resolve.OPERATOR_MOD_DEPRECATED_NAMES
 import org.jetbrains.kotlin.resolve.calls.CallTransformer
 import org.jetbrains.kotlin.resolve.calls.callResolverUtil.isConventionCall
 import org.jetbrains.kotlin.resolve.calls.model.ResolvedCall
@@ -31,6 +32,7 @@ import org.jetbrains.kotlin.resolve.calls.model.VariableAsFunctionResolvedCall
 import org.jetbrains.kotlin.resolve.calls.tasks.isDynamic
 import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameUnsafe
 import org.jetbrains.kotlin.types.ErrorUtils
+import org.jetbrains.kotlin.types.expressions.OperatorConventions
 
 class OperatorCallChecker : CallChecker {
     override fun check(resolvedCall: ResolvedCall<*>, reportOn: PsiElement, context: CallCheckerContext) {
@@ -58,6 +60,14 @@ class OperatorCallChecker : CallChecker {
         }
 
         val isConventionOperator = element is KtOperationReferenceExpression && element.isConventionOperator()
+
+        if (isConventionOperator) {
+            if (functionDescriptor.name in OPERATOR_MOD_DEPRECATED_NAMES) {
+                val newNameConvention = OperatorConventions.DEPRECATED_MOD_OPERATION_NAMES.inverse()[functionDescriptor.name]
+                context.trace.report(Errors.DEPRECATED_BINARY_MOD_AS_REM.on(reportOn, functionDescriptor, newNameConvention!!.asString()))
+            }
+        }
+
         if (isConventionOperator || element is KtArrayAccessExpression) {
             if (!functionDescriptor.isOperator) {
                 report(reportOn, functionDescriptor, context.trace)
