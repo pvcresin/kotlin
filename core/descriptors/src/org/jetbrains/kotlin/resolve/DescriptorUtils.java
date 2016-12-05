@@ -575,4 +575,17 @@ public class DescriptorUtils {
     public static Collection<DeclarationDescriptor> getAllDescriptors(@NotNull MemberScope scope) {
         return scope.getContributedDescriptors(DescriptorKindFilter.ALL, MemberScope.Companion.getALL_NAME_FILTER());
     }
+
+    @NotNull
+    public static FunctionDescriptor getFunctionByName(@NotNull MemberScope scope, @NotNull Name name) {
+        Collection<DeclarationDescriptor> functions = scope.getContributedDescriptors(DescriptorKindFilter.FUNCTIONS,
+                                                                                      MemberScope.Companion.getALL_NAME_FILTER());
+        for (DeclarationDescriptor d : functions) {
+            if (d instanceof FunctionDescriptor && name.equals(d.getOriginal().getName())) {
+                return (FunctionDescriptor) d;
+            }
+        }
+
+        throw new IllegalStateException("Function not found");
+    }
 }
