@@ -18,5 +18,8 @@ fun box(): String {
     a = D()
     if (a !is I) return "fail3"
 
+    a = C()
+    if (a is I) return "fail4"
+
     return "OK"
 }
