@@ -24,6 +24,7 @@ import org.jetbrains.kotlin.js.translate.general.AbstractTranslator
 import org.jetbrains.kotlin.js.translate.utils.JsAstUtils
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.resolve.DescriptorUtils
+import org.jetbrains.kotlin.resolve.descriptorUtil.fqNameSafe
 import org.jetbrains.kotlin.resolve.scopes.DescriptorKindFilter
 
 class EnumTranslator(
@@ -56,8 +57,18 @@ class EnumTranslator(
             }
         }
 
+        val exceptionRef = JsNameRef("IllegalStateException", JsNameRef("kotlin", JsNameRef("Kotlin")))
+        val message = JsBinaryOperation(JsBinaryOperator.ADD,
+                context().program().getStringLiteral("No enum constant ${descriptor.fqNameSafe}."),
+                nameParam.makeRef())
+        val throwStatement = JsThrow(JsNew(exceptionRef, listOf(message)))
+
         if (clauses.isNotEmpty()) {
-            function.body.statements += JsSwitch(nameParam.makeRef(), clauses)
+            val defaultCase = JsDefault().apply { statements += throwStatement }
+            function.body.statements += JsSwitch(nameParam.makeRef(), clauses + defaultCase)
+        }
+        else {
+            function.body.statements += throwStatement
         }
 
     }
