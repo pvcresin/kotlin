@@ -17,6 +17,7 @@
 package org.jetbrains.kotlin.codegen.coroutines
 
 import com.intellij.openapi.project.Project
+import org.jetbrains.kotlin.backend.common.findInterceptResume
 import org.jetbrains.kotlin.backend.common.getBuiltInSuspendWithCurrentContinuation
 import org.jetbrains.kotlin.builtins.KotlinBuiltIns
 import org.jetbrains.kotlin.codegen.binding.CodegenBinding
@@ -27,7 +28,6 @@ import org.jetbrains.kotlin.descriptors.SimpleFunctionDescriptor
 import org.jetbrains.kotlin.descriptors.SourceElement
 import org.jetbrains.kotlin.descriptors.annotations.Annotations
 import org.jetbrains.kotlin.descriptors.impl.ValueParameterDescriptorImpl
-import org.jetbrains.kotlin.incremental.components.NoLookupLocation
 import org.jetbrains.kotlin.name.Name
 import org.jetbrains.kotlin.psi.*
 import org.jetbrains.kotlin.resolve.*
@@ -238,14 +238,9 @@ private fun FunctionDescriptor.getContinuationParameterTypeOfSuspendFunction() =
 
 val KotlinBuiltIns.continuationClassDescriptor get() = getBuiltInClassByFqName(DescriptorUtils.CONTINUATION_INTERFACE_FQ_NAME)
 
-fun KotlinType.hasInlineInterceptResume() =
-        findOperatorInController(this, OperatorNameConventions.COROUTINE_INTERCEPT_RESUME)?.isInline == true
+fun KotlinType.hasInlineInterceptResume() = findInterceptResume()?.isInline == true
 
-fun KotlinType.hasNoinlineInterceptResume() =
-        findOperatorInController(this, OperatorNameConventions.COROUTINE_INTERCEPT_RESUME)?.isInline == false
-
-fun findOperatorInController(controllerType: KotlinType, name: Name): SimpleFunctionDescriptor? =
-        controllerType.memberScope.getContributedFunctions(name, NoLookupLocation.FROM_BACKEND).singleOrNull { it.isOperator }
+fun KotlinType.hasNoinlineInterceptResume() = findInterceptResume()?.isInline == false
 
 val SUSPEND_WITH_CURRENT_CONTINUATION_NAME = Name.identifier("suspendWithCurrentContinuation")
 
