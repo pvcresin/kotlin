@@ -1,0 +1,1 @@
+impl fun foo(): Int = 42

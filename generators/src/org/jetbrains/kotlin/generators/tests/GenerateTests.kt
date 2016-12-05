@@ -483,6 +483,10 @@ fun main(args: Array<String>) {
             model("checker/js")
         }
 
+        testClass<AbstractMultiPlatformCheckerTest> {
+            model("checker/multiPlatform", extension = null, recursive = true, excludeParentDirs = true)
+        }
+
         testClass<AbstractQuickFixTest> {
             model("quickfix", pattern = "^([\\w\\-_]+)\\.kt$", filenameStartsLowerCase = true)
         }
