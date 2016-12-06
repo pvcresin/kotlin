@@ -19,6 +19,7 @@ package org.jetbrains.kotlin.js.translate.declaration
 import com.google.dart.compiler.backend.js.ast.*
 import org.jetbrains.kotlin.descriptors.ClassDescriptor
 import org.jetbrains.kotlin.descriptors.FunctionDescriptor
+import org.jetbrains.kotlin.js.translate.context.Namer
 import org.jetbrains.kotlin.js.translate.context.TranslationContext
 import org.jetbrains.kotlin.js.translate.general.AbstractTranslator
 import org.jetbrains.kotlin.js.translate.utils.JsAstUtils
@@ -57,11 +58,10 @@ class EnumTranslator(
             }
         }
 
-        val exceptionRef = JsNameRef("IllegalStateException", JsNameRef("kotlin", JsNameRef("Kotlin")))
         val message = JsBinaryOperation(JsBinaryOperator.ADD,
                 context().program().getStringLiteral("No enum constant ${descriptor.fqNameSafe}."),
                 nameParam.makeRef())
-        val throwStatement = JsThrow(JsNew(exceptionRef, listOf(message)))
+        val throwStatement = JsExpressionStatement(JsInvocation(Namer.throwIllegalStateExcpetionFunRef(), message))
 
         if (clauses.isNotEmpty()) {
             val defaultCase = JsDefault().apply { statements += throwStatement }
