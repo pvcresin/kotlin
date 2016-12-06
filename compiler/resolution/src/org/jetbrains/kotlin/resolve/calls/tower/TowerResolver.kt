@@ -57,9 +57,17 @@ interface CandidateFactoryProviderForInvoke<F : Candidate<FunctionDescriptor>, V
 }
 
 sealed class TowerData {
+    interface LevelContainer {
+        val level: ScopeTowerLevel
+    }
+
     object Empty : TowerData()
     class OnlyImplicitReceiver(val implicitReceiver: ReceiverValueWithSmartCastInfo): TowerData()
-    class TowerLevel(val level: ScopeTowerLevel) : TowerData()
+    class TowerLevel(override val level: ScopeTowerLevel) : TowerData(), LevelContainer
+    class MemberLevelFromImplicitReceiver(
+            override val level: ScopeTowerLevel,
+            val dispatchReceiver: ReceiverValueWithSmartCastInfo
+    ) : TowerData(), LevelContainer
     class BothTowerLevelAndImplicitReceiver(val level: ScopeTowerLevel, val implicitReceiver: ReceiverValueWithSmartCastInfo) : TowerData()
 }
 
@@ -89,7 +97,7 @@ class TowerResolver {
             if (scope is LexicalScope) {
                 if (!scope.kind.withLocalDescriptors) result.add(ScopeBasedTowerLevel(this, scope))
 
-                getImplicitReceiver(scope)?.let { result.add(ReceiverScopeTowerLevel(this, it)) }
+                getImplicitReceiver(scope)?.let { result.add(MemberScopeTowerLevel(this, it)) }
             }
             else {
                 result.add(ImportingScopeBasedTowerLevel(this, scope as ImportingScope))
@@ -119,7 +127,7 @@ class TowerResolver {
         TowerData.TowerLevel(hidesMembersLevel).process()?.let { return it }
         // possibly there is explicit member
         TowerData.Empty.process()?.let { return it }
-        // synthetic member for explicit receiver
+        // synthetic property for explicit receiver
         TowerData.TowerLevel(syntheticLevel).process()?.let { return it }
 
         // local non-extensions or extension for explicit receiver
@@ -140,9 +148,11 @@ class TowerResolver {
                     TowerData.BothTowerLevelAndImplicitReceiver(hidesMembersLevel, implicitReceiver).process()?.let { return it }
 
                     // members of implicit receiver or member extension for explicit receiver
-                    TowerData.TowerLevel(ReceiverScopeTowerLevel(this, implicitReceiver)).process()?.let { return it }
+                    TowerData.MemberLevelFromImplicitReceiver(
+                            MemberScopeTowerLevel(this, implicitReceiver), implicitReceiver
+                    ).process()?.let { return it }
 
-                    // synthetic members
+                    // synthetic properties
                     TowerData.BothTowerLevelAndImplicitReceiver(syntheticLevel, implicitReceiver).process()?.let { return it }
 
                     // invokeExtension on local variable
@@ -233,11 +243,9 @@ class TowerResolver {
         private var currentCandidates: Collection<C> = emptyList()
         private var currentLevel: ResolutionCandidateApplicability? = null
 
-        override fun getSuccessfulCandidates(): Collection<C>? = getResolved() ?: getResolvedSynthetic()
+        override fun getSuccessfulCandidates(): Collection<C>? = getResolved()
 
         fun getResolved() = currentCandidates.check { currentLevel == ResolutionCandidateApplicability.RESOLVED }
-
-        fun getResolvedSynthetic() = currentCandidates.check { currentLevel == ResolutionCandidateApplicability.RESOLVED_SYNTHESIZED }
 
         fun getResolvedLowPriority() = currentCandidates.check { currentLevel == ResolutionCandidateApplicability.RESOLVED_LOW_PRIORITY }
 
@@ -245,7 +253,7 @@ class TowerResolver {
             currentLevel == null || currentLevel!! > ResolutionCandidateApplicability.RESOLVED_LOW_PRIORITY
         }
 
-        override fun getFinalCandidates() = getResolved() ?: getResolvedSynthetic() ?: getResolvedLowPriority() ?: getErrors() ?: emptyList()
+        override fun getFinalCandidates() = getResolved() ?: getResolvedLowPriority() ?: getErrors() ?: emptyList()
 
         override fun addCandidates(candidates: Collection<C>) {
             val minimalLevel = candidates.map { getStatus(it).resultingApplicability }.min()!!
