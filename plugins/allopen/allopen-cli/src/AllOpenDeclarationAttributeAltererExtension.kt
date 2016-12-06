@@ -29,7 +29,7 @@ import org.jetbrains.kotlin.resolve.BindingContext
 class CliAllOpenDeclarationAttributeAltererExtension(
         private val allOpenAnnotationFqNames: List<String>
 ) : AbstractAllOpenDeclarationAttributeAltererExtension() {
-    override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner) = allOpenAnnotationFqNames
+    override fun getAnnotationFqNames(modifierListOwner: KtModifierListOwner?) = allOpenAnnotationFqNames
 }
 
 abstract class AbstractAllOpenDeclarationAttributeAltererExtension : DeclarationAttributeAltererExtension, AnnotationBasedExtension {

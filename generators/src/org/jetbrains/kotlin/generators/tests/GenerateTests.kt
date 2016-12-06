@@ -162,6 +162,7 @@ import org.jetbrains.kotlin.shortenRefs.AbstractShortenRefsTest
 import org.jetbrains.kotlin.test.TargetBackend
 import org.jetbrains.kotlin.types.AbstractTypeBindingTest
 import org.jetbrains.kotlin.idea.refactoring.AbstractNameSuggestionProviderTest
+import org.jetbrains.kotlin.samWithReceiver.AbstractSamWithReceiverTest
 import java.io.File
 import java.lang.IllegalArgumentException
 import java.util.*
@@ -1164,6 +1165,12 @@ fun main(args: Array<String>) {
     testGroup("plugins/plugins-tests/tests", "plugins/noarg/noarg-cli/testData") {
         testClass<AbstractBytecodeListingTestForNoArg>() {
             model("bytecodeListing", extension = "kt")
+        }
+    }
+
+    testGroup("plugins/plugins-tests/tests", "plugins/sam-with-receiver/testData") {
+        testClass<AbstractSamWithReceiverTest> {
+            model("diagnostics")
         }
     }
 
