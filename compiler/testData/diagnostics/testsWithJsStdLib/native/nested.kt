@@ -1,3 +1,4 @@
+// !DIAGNOSTICS: -DEPRECATION
 object O
 
 class TopLevel {
