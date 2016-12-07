@@ -9,6 +9,8 @@ class TopLevel {
 
     <!NESTED_EXTERNAL_DECLARATION!>external fun bar(): Int<!>
 
+    <!NESTED_EXTERNAL_DECLARATION!>@native fun baz(): Int<!>
+
     val x = "a"
 
     <!NESTED_EXTERNAL_DECLARATION!>external val y: String<!>

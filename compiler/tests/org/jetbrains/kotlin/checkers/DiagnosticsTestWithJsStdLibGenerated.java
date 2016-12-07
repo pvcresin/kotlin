@@ -616,12 +616,6 @@ public class DiagnosticsTestWithJsStdLibGenerated extends AbstractDiagnosticsTes
                 doTest(fileName);
             }
 
-            @TestMetadata("onLocalNativeClassMembers.kt")
-            public void testOnLocalNativeClassMembers() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/testsWithJsStdLib/native/nativeSetter/onLocalNativeClassMembers.kt");
-                doTest(fileName);
-            }
-
             @TestMetadata("onLocalNonNativeClassMembers.kt")
             public void testOnLocalNonNativeClassMembers() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/diagnostics/testsWithJsStdLib/native/nativeSetter/onLocalNonNativeClassMembers.kt");

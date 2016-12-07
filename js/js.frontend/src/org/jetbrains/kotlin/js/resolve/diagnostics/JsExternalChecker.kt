@@ -20,9 +20,11 @@ import org.jetbrains.kotlin.descriptors.DeclarationDescriptor
 import org.jetbrains.kotlin.descriptors.PropertyAccessorDescriptor
 import org.jetbrains.kotlin.diagnostics.DiagnosticSink
 import org.jetbrains.kotlin.diagnostics.Errors
+import org.jetbrains.kotlin.js.PredefinedAnnotation
 import org.jetbrains.kotlin.js.translate.utils.AnnotationsUtils
 import org.jetbrains.kotlin.lexer.KtTokens
 import org.jetbrains.kotlin.psi.KtDeclaration
+import org.jetbrains.kotlin.psi.KtProperty
 import org.jetbrains.kotlin.resolve.BindingContext
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 import org.jetbrains.kotlin.resolve.checkers.SimpleDeclarationChecker
@@ -33,7 +35,7 @@ class JsExternalChecker : SimpleDeclarationChecker {
         if (!AnnotationsUtils.isNativeObject(descriptor)) return
 
         if (!DescriptorUtils.isTopLevelDeclaration(descriptor)) {
-            if (declaration.hasModifier(KtTokens.EXTERNAL_KEYWORD) && descriptor !is PropertyAccessorDescriptor) {
+            if (isDirectlyExternal(declaration, descriptor) && descriptor !is PropertyAccessorDescriptor) {
                 diagnosticHolder.report(ErrorsJs.NESTED_EXTERNAL_DECLARATION.on(declaration))
             }
         }
@@ -41,8 +43,15 @@ class JsExternalChecker : SimpleDeclarationChecker {
         if (DescriptorUtils.isAnnotationClass(descriptor)) {
             diagnosticHolder.report(Errors.WRONG_MODIFIER_TARGET.on(declaration, KtTokens.EXTERNAL_KEYWORD, "annotation class"))
         }
-        else if (descriptor is PropertyAccessorDescriptor && !AnnotationsUtils.isNativeObject(descriptor.correspondingProperty)) {
+        else if (descriptor is PropertyAccessorDescriptor && isDirectlyExternal(declaration, descriptor)) {
             diagnosticHolder.report(Errors.WRONG_MODIFIER_TARGET.on(declaration, KtTokens.EXTERNAL_KEYWORD, "property accessor"))
         }
+    }
+
+    private fun isDirectlyExternal(declaration: KtDeclaration, descriptor: DeclarationDescriptor): Boolean {
+        if (declaration is KtProperty && descriptor is PropertyAccessorDescriptor) return false
+
+        return declaration.hasModifier(KtTokens.EXTERNAL_KEYWORD) ||
+               AnnotationsUtils.hasAnnotation(descriptor, PredefinedAnnotation.NATIVE)
     }
 }
