@@ -1,15 +1,13 @@
 fun notNullValues(list: MutableList<String>) {
-    // TODO: Fix platform types
     list.replaceAll { it.length.toString() }
         // SUCCESS
-        // ORIGINAL:    fun <E> MutableList<E>.replaceAll((E!) -> E!): Unit
-        // SUBSTITUTED: fun <E> MutableList<String>.replaceAll((String!) -> String!): Unit
+        // ORIGINAL:    fun <E> MutableList<E>.replaceAll((E) -> E): Unit
+        // SUBSTITUTED: fun <E> MutableList<String>.replaceAll((String) -> String): Unit
 }
 
 fun nullableValues(list: MutableList<String?>) {
-    // TODO: Fix platform types
     list.replaceAll { it?.run {  length.toString() } }
         // SUCCESS
-        // ORIGINAL:    fun <E> MutableList<E>.replaceAll((E!) -> E!): Unit
+        // ORIGINAL:    fun <E> MutableList<E>.replaceAll((E) -> E): Unit
         // SUBSTITUTED: fun <E> MutableList<String?>.replaceAll((String?) -> String?): Unit
 }
