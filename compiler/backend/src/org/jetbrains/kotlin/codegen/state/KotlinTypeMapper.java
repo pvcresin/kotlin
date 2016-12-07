@@ -891,7 +891,9 @@ public class KotlinTypeMapper {
             return name;
         }
 
-        if (!(descriptor instanceof ConstructorDescriptor) && descriptor.getVisibility() == Visibilities.INTERNAL) {
+        if (!(descriptor instanceof ConstructorDescriptor) &&
+            descriptor.getVisibility() == Visibilities.INTERNAL &&
+            !descriptor.getAnnotations().hasAnnotation(KotlinBuiltIns.FQ_NAMES.publishedApi)) {
             return name + "$" + JvmAbi.sanitizeAsJavaIdentifier(moduleName);
         }
 
